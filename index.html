@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Videowall Dinámico</title>
+
+<style>
+  body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #181818;
+    color: #fff;
+  }
+
+  .controls {
+    padding: 15px;
+    background: #202020;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    border-bottom: 2px solid #333;
+  }
+
+  #videowall {
+    display: grid;
+    gap: 10px;
+    width: 100%;
+    padding: 10px;
+    box-sizing: border-box;
+    height: calc(100vh - 70px);
+  }
+
+  .camera {
+    background: #000;
+    border: 2px solid #333;
+    border-radius: 6px;
+    overflow: hidden;
+    position: relative;
+  }
+
+  .camera video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  /* Etiqueta de "Cam X" */
+  .label {
+    position: absolute;
+    bottom: 5px;
+    left: 5px;
+    background: rgba(0,0,0,0.6);
+    padding: 3px 7px;
+    font-size: 14px;
+    border-radius: 3px;
+  }
+
+</style>
+</head>
+<body>
+
+<div class="controls">
+  <label for="numCams">Número de cámaras:</label>
+  <input type="number" id="numCams" min="1" max="50" value="4">
+  <button onclick="crearVideowall()">Aplicar</button>
+</div>
+
+<div id="videowall" class="grid"></div>
+
+<script>
+function crearVideowall() {
+  const num = parseInt(document.getElementById("numCams").value);
+  const grid = document.getElementById("videowall");
+
+  // Limpiar videowall
+  grid.innerHTML = "";
+
+  // Calcular columnas óptimas para un layout cuadrado
+  const cols = Math.ceil(Math.sqrt(num));
+  grid.style.gridTemplateColumns = `repeat(${cols}, 1fr)`;
+
+  for (let i = 1; i <= num; i++) {
+    const camDiv = document.createElement("div");
+    camDiv.className = "camera";
+
+    // Video ejemplo
+    const video = document.createElement("video");
+    video.src = "https://www.w3schools.com/html/mov_bbb.mp4";
+    video.autoplay = true;
+    video.muted = true;
+    video.loop = true;
+
+    // Etiqueta de cámara
+    const label = document.createElement("div");
+    label.className = "label";
+    label.textContent = "Cam " + i;
+
+    camDiv.appendChild(video);
+    camDiv.appendChild(label);
+    grid.appendChild(camDiv);
+  }
+}
+
+// Inicializar videowall al cargar
+crearVideowall();
+</script>
+
+</body>
+</html>
